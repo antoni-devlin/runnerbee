@@ -19,7 +19,7 @@
                   // A labels array that can contain any sort of values
                   labels: [{% for run in runs %}"{{run.date_posted.strftime('%d/%m/%Y, %H:%M')}}",{% endfor %}],
                   // Our series array that contains series objects or in this case series data arrays
-                  series: [[{% for run in runs %}{{run.run_time}},{% endfor %}]]
+                  series: [[{% for run in runs %}{{run.distance}},{% endfor %}]]
                 };
 
                 // Create a new line chart object where as first parameter we pass in a selector
