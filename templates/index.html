@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+    {% block head %}
+        <title>Add Run</title>
+    {% endblock head %}
+    {% block content %}
+    <div class="main-box">
+        <h1>Recent Runs</h1>
+
+        {% for run in runs %}
+        <article class="recent-runs">
+            <h3>{{ run.date_posted.strftime('%d %B, %Y') }} <small> at {{ run.date_posted.strftime('%H:%M') }} </small></h3>
+              <ul>
+                <li> <strong> Distance: </strong> {{ run.distance }} km</li>
+                <li>Time: {{ run.run_time }} mins</li>
+                <li>Calories: {{ run.calories_burned }} Cal</li>
+                <li><a href="{{url_for('delete_run', id=run.id)}}" onclick="return confirm('Are you sure you want to delete this entry?\nThis is irreversible.')">Delete</a></li>
+              </ul>
+        </article>
+        {% endfor %}
+
+        </div>
+    {% endblock content %}
+</html>

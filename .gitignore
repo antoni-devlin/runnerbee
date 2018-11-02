@@ -1,0 +1,5 @@
+.flaskenv
+__pycache__
+*.pyc
+migrations/*
+venv/*

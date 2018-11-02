@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+    {% block head %}
+        <title> Home </title>
+    {% endblock head %}
+
+    {% block content %}
+    <div class="main-box">
+        <h1>Add Run</h1>
+        <form class="" action="" method="post">
+            {{form.hidden_tag()}}
+
+            {{form.distance.label}}
+            {{form.distance}}
+<br>
+            {{form.run_time.label}}
+            {{form.run_time}}
+<br>
+            {{form.calories_burned.label}}
+            {{form.calories_burned}}
+<br>
+            {{form.submit}}
+        </form>
+    </div>
+
+    {% endblock content %}

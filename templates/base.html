@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+    <head>
+        <meta charset="utf-8">
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+        {% block head %}
+        {% endblock head %}
+    </head>
+    <body>
+        <nav>
+            <a href="{{url_for('index')}}">Home</a>
+            <a href="{{url_for('add')}}">Add Run</a>
+            <a href="{{url_for('dashboard')}}">Dashboard</a>
+        </nav>
+        <main>
+
+        {% block content %}
+        {% endblock content %}
+
+        {% block footer %}
+        {% endblock footer %}
+        </main>
+    </body>
+</html>
