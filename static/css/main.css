@@ -58,7 +58,7 @@ div.main-box {
 }
 
 .main-box > article > ul > li:last-of-type {
-    margin: 0px 0px;
+    margin: 0px;
     float: right;
 }
 

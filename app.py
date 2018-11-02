@@ -1,11 +1,14 @@
 #!/usr/bin/python3
-from flask import Flask, url_for, render_template, request, flash, redirect
+from flask import Flask, url_for, render_template, request, flash, redirect, jsonify
+from sqlalchemy.dialects.postgresql import *
 from flask_sqlalchemy import *
 from flask_migrate import Migrate
 from datetime import datetime
 from flask_wtf import FlaskForm
 from wtforms import StringField, BooleanField, SubmitField
 from wtforms.validators import DataRequired, ValidationError, Email, EqualTo, Length
+from flask_marshmallow import Marshmallow
+import json
 
 if not os.environ.get('DATABASE_URL'):
     #Developement Database
@@ -24,18 +27,25 @@ app.config['SECRET_KEY'] = '585g279b0br00rab66dyvwL0B62RDV;;S' #TEMPORARY KEY, C
 
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
+ma = Marshmallow(app)
 
 #Runs Table
 class Run(db.Model):
 
     id = db.Column(db.Integer(), primary_key=True)
     date_posted = db.Column(db.DateTime(), index = True, default = datetime.utcnow)
-    distance = db.Column(db.String(80))
-    run_time = db.Column(db.String(80))
-    calories_burned = db.Column(db.String(80))
+    distance = db.Column(db.Float())
+    run_time = db.Column(db.Integer())
+    calories_burned = db.Column(db.Integer())
 
     def __repr__(self):
         return '<Run {}>'.format(self.distance)
+
+# Marshmallow Schema
+
+class RunSchema(ma.ModelSchema):
+    class Meta:
+        model = Run
 
 #Forms
 class AddRunForm(FlaskForm):
@@ -81,4 +91,9 @@ def delete_run(id):
 
 @app.route('/dashboard')
 def dashboard():
-    return render_template('dashboard.html')
+    runs = Run.query.order_by(Run.date_posted.desc())
+    # runs = Run.query.all()
+    # run_schema = RunSchema(many=True)
+    # output = run_schema.dump(runs).data
+    # results = jsonify({'runs' : output})
+    return render_template('dashboard.html', runs = runs)

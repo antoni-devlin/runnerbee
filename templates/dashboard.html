@@ -1,9 +1,36 @@
 {% extends "base.html" %}
     {% block head %}
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/chartist.js/latest/chartist.min.css">
+    <script src="https://cdn.jsdelivr.net/chartist.js/latest/chartist.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
         <title>Add Run</title>
     {% endblock head %}
     {% block content %}
-        <h2>Under Construction!</h2>
-        <p>Check back soon!</p>
+        <h2>Analyse all the data!</h2>
+
+        <!-- {% for run in runs %}
+        <p>{{run.date_posted}}</p>
+        {% endfor %} -->
+
+        <div class="ct-chart ct-perfect-fourth">
+            <script type="text/javascript">
+
+                var data = {
+                  // A labels array that can contain any sort of values
+                  labels: [{% for run in runs %}"{{run.date_posted.strftime('%d/%m/%Y, %H:%M')}}",{% endfor %}],
+                  // Our series array that contains series objects or in this case series data arrays
+                  series: [[{% for run in runs %}{{run.run_time}},{% endfor %}]]
+                };
+
+                // Create a new line chart object where as first parameter we pass in a selector
+                // that is resolving to our chart container element. The Second parameter
+                // is the actual data object.
+                new Chartist.Line('.ct-chart', data);
+
+
+            </script>
+        </div>
+
+
     {% endblock content %}
 </html>
