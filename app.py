@@ -48,7 +48,7 @@ class RunSchema(ma.ModelSchema):
         model = Run
 
 #Forms
-class AddRunForm(FlaskForm):
+class AddEditRunForm(FlaskForm):
     distance = StringField('Distance (km)', validators=[DataRequired()])
     run_time = StringField('Run Time (minutes)', validators=[DataRequired()])
     calories_burned = StringField('Calories Burned', validators=[DataRequired()])
@@ -66,14 +66,13 @@ def go_index():
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
-    title = 'Antoni Devlin | Blog'
     runs = Run.query.order_by(Run.date_posted.desc())
-    return render_template('index.html', runs=runs, title=title)
+    return render_template('index.html', runs=runs)
 
 #New Run Route
 @app.route('/add', methods=['GET', 'POST'])
 def add():
-    form = AddRunForm()
+    form = AddEditRunForm()
     run = Run()
     if form.validate_on_submit():
         run = Run(distance = form.distance.data, run_time = form.run_time.data, calories_burned = form.calories_burned.data)
@@ -89,11 +88,19 @@ def delete_run(id):
     db.session.commit()
     return redirect(url_for('index'))
 
+@app.route('/edit/<int:id>', methods=['GET', 'POST'])
+def edit_run(id):
+    run = Run.query.filter_by(id=id).first_or_404()
+    form = AddEditRunForm(obj=run)
+    if form.validate_on_submit():
+            run.distance = form.distance.data
+            run.run_time = form.run_time.data
+            run.calories_burned = form.calories_burned.data
+            db.session.commit()
+            return redirect(url_for('index'))
+    return render_template('add_run.html', form=form, run = run)
+
 @app.route('/dashboard')
 def dashboard():
     runs = Run.query.order_by(Run.date_posted.desc())
-    # runs = Run.query.all()
-    # run_schema = RunSchema(many=True)
-    # output = run_schema.dump(runs).data
-    # results = jsonify({'runs' : output})
     return render_template('dashboard.html', runs = runs)

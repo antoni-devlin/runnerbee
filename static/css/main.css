@@ -57,9 +57,13 @@ div.main-box {
     display: inline;
 }
 
-.main-box > article > ul > li:last-of-type {
+.main-box > article > ul > li:nth-of-type(4), li:nth-of-type(5) {
     margin: 0px;
     float: right;
+}
+
+.main-box > article > ul > li > a:nth-child(5) {
+    padding: 0 0 10px 0;
 }
 
 .main-box > article > ul > li > a {
