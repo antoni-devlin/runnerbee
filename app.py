@@ -36,23 +36,13 @@ login = LoginManager(app)
 heroku = Heroku(app)
 login.login_view = 'login'
 
-#Runs Table
-class Run(db.Model):
-
-    id = db.Column(db.Integer(), primary_key=True)
-    date_posted = db.Column(db.DateTime(), index = True, default = datetime.utcnow)
-    distance = db.Column(db.Float())
-    run_time = db.Column(db.Integer())
-    calories_burned = db.Column(db.Integer())
-
-    def __repr__(self):
-        return '<Run {}>'.format(self.distance)
-
+#Users Table
 class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(64), index=True, unique=True)
     email = db.Column(db.String(120), index=True, unique=True)
     password_hash = db.Column(db.String(128))
+    runs = db.relationship('Run', backref='owner')
 
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)
@@ -62,6 +52,19 @@ class User(UserMixin, db.Model):
 
     def __repr__(self):
         return '<User {}>'.format(self.username)
+
+#Runs Table
+class Run(db.Model):
+
+    id = db.Column(db.Integer(), primary_key=True)
+    date_posted = db.Column(db.DateTime(), index = True, default = datetime.utcnow)
+    distance = db.Column(db.Float())
+    run_time = db.Column(db.Integer())
+    calories_burned = db.Column(db.Integer())
+    owner_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+
+    def __repr__(self):
+        return '<Run {}>'.format(self.distance)
 
 # Marshmallow Schema
 
@@ -132,8 +135,9 @@ def index():
 def add():
     form = AddEditRunForm()
     run = Run()
+    owner = User.query.filter_by(id=current_user.get_id()).first()
     if form.validate_on_submit():
-        run = Run(distance = form.distance.data, run_time = form.run_time.data, calories_burned = form.calories_burned.data)
+        run = Run(distance = form.distance.data, run_time = form.run_time.data, calories_burned = form.calories_burned.data, owner=owner)
 
         db.session.add(run)
         db.session.commit()
