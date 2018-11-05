@@ -11,6 +11,7 @@ from wtforms.validators import DataRequired, ValidationError, Email, EqualTo, Le
 from werkzeug.security import generate_password_hash, check_password_hash
 from werkzeug.urls import url_parse
 from flask_marshmallow import Marshmallow
+from flask_heroku import Heroku
 import json
 
 if not os.environ.get('DATABASE_URL'):
@@ -32,6 +33,7 @@ db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 ma = Marshmallow(app)
 login = LoginManager(app)
+heroku = Heroku(app)
 login.login_view = 'login'
 
 #Runs Table

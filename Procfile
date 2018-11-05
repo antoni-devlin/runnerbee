@@ -1,1 +1,1 @@
-web: flask db upgrade; gunicorn runnerbee:app
+web: gunicorn app:app
