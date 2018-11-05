@@ -5,7 +5,7 @@
     {% block content %}
     <div class="main-box">
         <h1>Recent Runs</h1>
-
+        <p>{{user}}</p>
         {% for run in runs %}
         <article class="recent-runs">
             <h3>{{ run.date_posted.strftime('%d %B, %Y') }} <small> at {{ run.date_posted.strftime('%H:%M') }} </small></h3>
