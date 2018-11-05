@@ -28,6 +28,9 @@
                 {% else %}
                 <a href="{{ url_for('logout') }}">Logout</a>
             {% endif %}
+            {% if current_user.is_authenticated %}
+                Hi {{ current_user.username.title() }}!
+            {% endif %}
 
         </nav>
         <main>

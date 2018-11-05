@@ -126,7 +126,7 @@ def go_index():
 @app.route('/', methods=['GET', 'POST'])
 @login_required
 def index():
-    runs = Run.query.order_by(Run.date_posted.desc())
+    runs = Run.query.filter_by(owner_id=current_user.get_id()).order_by(Run.date_posted.desc())
     return render_template('index.html', runs=runs)
 
 #New Run Route
