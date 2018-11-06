@@ -135,7 +135,7 @@ def report():
         total_distance += distance
 
     sendemail(email, 'RunnerBee Weekly Report', 'no-reply@runnerbee.com',
-    'You\'ve run {} km so far, over the course of {} runs. Well done!'.format(total_distance, total_runs))
+    '<strong>You\'ve run {} km so far, over the course of {} runs. Well done!</strong>'.format(total_distance, total_runs))
 
 @app.route('/logout')
 @login_required
