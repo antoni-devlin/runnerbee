@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
     <head>
-
+        <link rel="shortcut icon" href="{{ url_for('static', filename='honey.png') }}">
         <!-- Global site tag (gtag.js) - Google Analytics -->
         <script async src="https://www.googletagmanager.com/gtag/js?id=UA-128689538-1"></script>
         <script>
@@ -20,6 +20,9 @@
     </head>
     <body>
         <nav>
+            {% if current_user.is_authenticated %}
+                Hi {{ current_user.username.title() }}!
+            {% endif %}
             <a href="{{url_for('index')}}">Home</a>
             <a href="{{url_for('add')}}">Add Run</a>
             <a href="{{url_for('dashboard')}}">Dashboard</a>
@@ -27,9 +30,6 @@
                 <a href="{{url_for('login')}}">Login</a>
                 {% else %}
                 <a href="{{ url_for('logout') }}">Logout</a>
-            {% endif %}
-            {% if current_user.is_authenticated %}
-                Hi {{ current_user.username.title() }}!
             {% endif %}
 
         </nav>

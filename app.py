@@ -12,7 +12,10 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from werkzeug.urls import url_parse
 from flask_marshmallow import Marshmallow
 from flask_heroku import Heroku
+from email_notifications import sendemail
 import json
+import sys
+import logging
 
 if not os.environ.get('DATABASE_URL'):
     #Developement Database
@@ -24,6 +27,9 @@ else:
     print('\n--CUSTOM ALERT--\nDatabase_URL is %s\n--END ALERT--' % database_file)
 
 app = Flask(__name__)
+if 'DYNO' in os.environ:
+    app.logger.addHandler(logging.StreamHandler(sys.stdout))
+    app.logger.setLevel(logging.ERROR)
 
 app.config["SQLALCHEMY_DATABASE_URI"] = database_file
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
@@ -112,6 +118,28 @@ def login():
             next_page = url_for('index')
         return redirect(next_page)
     return render_template('login.html', title='Sign In', form=form)
+
+@app.route('/report')
+def report():
+
+    runs = Run.query.all()
+
+    user = User.query.filter_by(id=current_user.get_id()).first()
+    email = user.email
+
+    total_runs = len(runs)
+    total_distance  = 0
+
+    for run in runs:
+        distance = run.distance
+        total_distance += distance
+
+    sendemail(email,
+    'RunnerBee Weekly Report',
+    'no-reply@runnerbee.com',
+    'Hi there, {}!<br>So far, you have have been on <strong>{}</strong> runs, and covered <strong>{}</strong> km.<br>Well done!'.format(user.username.title(), total_runs, total_distance))
+
+    return redirect(url_for('index'))
 
 @app.route('/logout')
 @login_required
