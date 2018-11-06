@@ -15,7 +15,7 @@ def sendemail(to, subject, sender, content):
               "email": to
             }
           ],
-          "subject": subject
+          "subject": subject,
         }
       ],
       "from": {
