@@ -12,6 +12,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from werkzeug.urls import url_parse
 from flask_marshmallow import Marshmallow
 from flask_heroku import Heroku
+from email_notifications import sendemail
 import json
 
 if not os.environ.get('DATABASE_URL'):
@@ -112,6 +113,24 @@ def login():
             next_page = url_for('index')
         return redirect(next_page)
     return render_template('login.html', title='Sign In', form=form)
+
+@app.route('/report')
+def report():
+
+    runs = Run.query.all()
+
+    user = User.query.filter_by(id=current_user.get_id()).first()
+    email = user.email
+
+    total_runs = len(runs)
+    total_distance  = 0
+
+    for run in runs:
+        distance = run.distance
+        total_distance += distance
+
+    sendemail(email, 'RunnerBee Weekly Report', 'no-reply@runnerbee.com',
+    'You\'ve run {} km so far, over the course of {} runs. Well done!'.format(total_distance, total_runs))
 
 @app.route('/logout')
 @login_required
