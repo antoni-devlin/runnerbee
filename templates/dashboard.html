@@ -12,25 +12,77 @@
         <p>{{run.date_posted}}</p>
         {% endfor %} -->
 
-        <div class="ct-chart ct-perfect-fourth">
+<style media="screen">
+
+    body {
+      margin: 0 auto;
+      max-width: 90vw;
+      font-family: "Roboto", sans-serif;
+      line-height: 1.5;
+      color: #555;
+    }
+
+    .chart1 {
+        float: left;
+        width: 50%;
+    }
+
+    .chart2 {
+        float: left;
+        width: 50%;
+    }
+
+    .charts > div > h3 {
+        text-align: center;
+    }
+</style>
+
+
+<div class="charts">
+    <div class="chart1">
+        <h3>Distance run (by date)</h3>
+        <div class="ct-chart ct-golden-section" id="chart-distance-date"></div>
+    </div>
+    <div class="chart2">
+        <h3>Pace (by date))</h3>
+        <div class="ct-chart ct-golden-section" id="chart-pace-date"></div>
+    </div>
+</div>
+
+
+<script>
+  // Initialize a Line chart in the container with the ID chart1
+  new Chartist.Line('#chart-distance-date', {
+    labels: [{% for run in runs %}"{{run.date_posted.strftime('%d/%m/%Y, %H:%M')}}",{% endfor %}],
+    series: [[{% for run in runs %}{{run.distance}},{% endfor %}]]
+  });
+
+  // Initialize a Line chart in the container with the ID chart2
+  new Chartist.Bar('#chart-pace-date', {
+    labels: [{% for run in runs %}"{{run.date_posted.strftime('%d/%m/%Y, %H:%M')}}",{% endfor %}],
+    series: [[{% for run in runs %}{{run.run_time}}/{{run.distance}},{% endfor %}]]
+  });
+</script>
+
+
+
+        <!-- <div class="ct-chart ct-perfect-fourth" id="chart-distance-date"></div>
+        <div class="ct-chart ct-perfect-fourth" id="chart-pace-date"></div>
             <script type="text/javascript">
 
-                var data = {
-                  // A labels array that can contain any sort of values
-                  labels: [{% for run in runs %}"{{run.date_posted.strftime('%d/%m/%Y, %H:%M')}}",{% endfor %}],
-                  // Our series array that contains series objects or in this case series data arrays
-                  series: [[{% for run in runs %}{{run.distance}},{% endfor %}]]
-                };
+
+                new Chartist.Line('#chart1', {
+                    labels: [{% for run in runs %}"{{run.date_posted.strftime('%d/%m/%Y, %H:%M')}}",{% endfor %}],
+                    series: [[{% for run in runs %}{{run.distance}},{% endfor %}]]
+  });
 
                 // Create a new line chart object where as first parameter we pass in a selector
                 // that is resolving to our chart container element. The Second parameter
                 // is the actual data object.
-                new Chartist.Line('.ct-chart', data);
+                // new Chartist.Line('.ct-chart', data);
 
 
-            </script>
-        </div>
+            </script> -->
 
 
     {% endblock content %}
-</html>
