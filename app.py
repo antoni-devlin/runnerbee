@@ -481,7 +481,7 @@ def report():
 
     </body></html>
 
-    '''.format(user.username.title(),total_distance, total_runs))
+    '''.format(user.username,total_distance, total_runs))
     return redirect(url_for('index'))
 
 @app.route('/logout')
