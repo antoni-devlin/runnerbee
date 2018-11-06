@@ -23,7 +23,7 @@ def sendemail(to, subject, sender, content):
       },
       "content": [
         {
-          "type": "text/plain",
+          "type": "text/html",
           "value": content
         }
       ]

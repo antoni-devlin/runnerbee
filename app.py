@@ -136,6 +136,7 @@ def report():
 
     sendemail(email, 'RunnerBee Weekly Report', 'no-reply@runnerbee.com',
     '<strong>You\'ve run {} km so far, over the course of {} runs. Well done!</strong>'.format(total_distance, total_runs))
+    return redirect(url_for('index'))
 
 @app.route('/logout')
 @login_required
