@@ -141,7 +141,7 @@ def report():
 
     return redirect(url_for('index'))
 
-@app.route('/logout')
+@app.route('/logout', methods=['GET', 'POST'])
 @login_required
 def logout():
     logout_user()
