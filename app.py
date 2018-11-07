@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-from flask import Flask, url_for, render_template, request, flash, redirect, jsonify
+from flask import Flask, url_for, render_template, request, flash, redirect, jsonify, send_from_directory
 from sqlalchemy.dialects.postgresql import *
 from flask_sqlalchemy import *
 from flask_migrate import Migrate
@@ -140,6 +140,10 @@ def report():
     'Hi there, {}!<br>So far, you have have been on <strong>{}</strong> runs, and covered <strong>{}</strong> km.<br>Well done!'.format(user.username.title(), total_runs, total_distance))
 
     return redirect(url_for('index'))
+
+@app.route('/loaderio-b6cb9ac2b3fb712166b8a9f57cde8c67.html')
+def loader():
+    return send_from_directory('static', 'loaderio-b6cb9ac2b3fb712166b8a9f57cde8c67.html')
 
 @app.route('/logout')
 @login_required
