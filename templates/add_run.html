@@ -10,6 +10,14 @@
         <form class="" action="" method="post">
             {{form.hidden_tag()}}
 
+            {{form.date_posted.label}}
+            {{form.date_posted}}
+            {% if form.date_posted.errors %}
+                {% for error in form.date_posted.errors %}
+                <p class="error-message">{{  error }}</p>
+                {% endfor %}
+            {% endif %}
+<br>
             {{form.distance.label}}
             {{form.distance}}
 <br>

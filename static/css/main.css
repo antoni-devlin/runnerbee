@@ -89,7 +89,16 @@ div.main-box > h1, h2 {
 }
 /* Form Styles */
 
-input[type=text], input[type=password]{
+input[type="date"]:not(:valid):before {
+   content: attr(placeholder);
+   // style it like it real placeholder
+}
+
+input[type=date] {
+    font-family: "Helvetica", "Arial", serif;
+}
+
+input[type=text], input[type=password], input[type=date]{
     width: 100%;
     padding: 12px 20px;
     margin: 8px 0;
