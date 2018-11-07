@@ -7,6 +7,7 @@ from flask_login import LoginManager, UserMixin, current_user, login_user, logou
 from datetime import datetime
 from flask_wtf import FlaskForm
 from wtforms import StringField, BooleanField, SubmitField, PasswordField
+from wtforms.fields.html5 import DateField, TimeField
 from wtforms.validators import DataRequired, ValidationError, Email, EqualTo, Length
 from werkzeug.security import generate_password_hash, check_password_hash
 from werkzeug.urls import url_parse
@@ -80,9 +81,10 @@ class RunSchema(ma.ModelSchema):
 
 #Forms
 class AddEditRunForm(FlaskForm):
+    date_posted = DateField('Date', format='%Y-%m-%d', default=datetime.today)
     distance = StringField('Distance (km)', validators=[DataRequired()])
     run_time = StringField('Run Time (minutes)', validators=[DataRequired()])
-    calories_burned = StringField('Calories Burned', validators=[DataRequired()])
+    calories_burned = StringField('Calories Burned')
     submit = SubmitField('Submit')
 
 class LoginForm(FlaskForm):
@@ -165,7 +167,7 @@ def add():
     run = Run()
     owner = User.query.filter_by(id=current_user.get_id()).first()
     if form.validate_on_submit():
-        run = Run(distance = form.distance.data, run_time = form.run_time.data, calories_burned = form.calories_burned.data, owner=owner)
+        run = Run(distance = form.distance.data, run_time = form.run_time.data, calories_burned = form.calories_burned.data, date_posted =form.date_posted.data, owner=owner)
 
         db.session.add(run)
         db.session.commit()
