@@ -141,10 +141,6 @@ def report():
 
     return redirect(url_for('index'))
 
-@app.route('/loaderio-b6cb9ac2b3fb712166b8a9f57cde8c67.html')
-def loader():
-    return send_from_directory('static', 'loaderio-b6cb9ac2b3fb712166b8a9f57cde8c67.html')
-
 @app.route('/logout')
 @login_required
 def logout():
