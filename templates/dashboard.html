@@ -3,6 +3,8 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/chartist.js/latest/chartist.min.css">
     <script src="https://cdn.jsdelivr.net/chartist.js/latest/chartist.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+    <script src="{{ url_for('static', filename='js/chartist-plugins/chartist-plugin-pointlabels.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/chartist-plugins/chartist-plugin-axistitle.js') }}"></script>
         <title> Dashboard </title>
     {% endblock head %}
     {% block content %}
@@ -53,36 +55,64 @@
 <script>
   // Initialize a Line chart in the container with the ID chart1
   new Chartist.Bar('#chart-distance-date', {
-    labels: [{% for run in runs %}"{{run.date_posted.strftime('%d/%m/%Y, %H:%M')}}",{% endfor %}],
+    labels: [{% for run in runs %}"{{run.date_posted.strftime('%d/%m/%Y')}}",{% endfor %}],
     series: [[{% for run in runs %}{{run.distance}},{% endfor %}]]
-  });
+}, {
+    plugins: [
+    Chartist.plugins.ctAxisTitle({
+        axisX: {
+            axisTitle: "Date",
+            axisClass: "ct-axis-title",
+            offset: {
+              x: 0,
+              y: 20
+            },
+            textAnchor: "middle"
+          },
+          axisY: {
+            axisTitle: "Distance (km)",
+            axisClass: "ct-axis-title",
+            offset: {
+              x: 0,
+              y: -1
+            },
+            flipTitle: false
+          }
+    })
+    ]
+});
 
   // Initialize a Line chart in the container with the ID chart2
   new Chartist.Line('#chart-pace-date', {
-    labels: [{% for run in runs %}"{{run.date_posted.strftime('%d/%m/%Y, %H:%M')}}",{% endfor %}],
+    labels: [{% for run in runs %}"{{run.date_posted.strftime('%d/%m/%Y')}}",{% endfor %}],
     series: [[{% for run in runs %}{{run.run_time}}/{{run.distance}},{% endfor %}]]
+  }, {
+      plugins: [
+      Chartist.plugins.ctPointLabels({
+        textAnchor: 'middle'
+    }),
+    Chartist.plugins.ctAxisTitle({
+        axisX: {
+            axisTitle: "Date",
+            axisClass: "ct-axis-title",
+            offset: {
+              x: 0,
+              y: 20
+            },
+            textAnchor: "middle"
+          },
+          axisY: {
+            axisTitle: "Pace (time/distance)",
+            axisClass: "ct-axis-title",
+            offset: {
+              x: 0,
+              y: -1
+            },
+            flipTitle: false
+          }
+    })
+
+      ]
   });
 </script>
-
-
-
-        <!-- <div class="ct-chart ct-perfect-fourth" id="chart-distance-date"></div>
-        <div class="ct-chart ct-perfect-fourth" id="chart-pace-date"></div>
-            <script type="text/javascript">
-
-
-                new Chartist.Line('#chart1', {
-                    labels: [{% for run in runs %}"{{run.date_posted.strftime('%d/%m/%Y, %H:%M')}}",{% endfor %}],
-                    series: [[{% for run in runs %}{{run.distance}},{% endfor %}]]
-  });
-
-                // Create a new line chart object where as first parameter we pass in a selector
-                // that is resolving to our chart container element. The Second parameter
-                // is the actual data object.
-                // new Chartist.Line('.ct-chart', data);
-
-
-            </script> -->
-
-
     {% endblock content %}

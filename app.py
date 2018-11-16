@@ -208,5 +208,5 @@ def edit_run(id):
 @app.route('/dashboard')
 @login_required
 def dashboard():
-    runs = Run.query.filter_by(owner_id=current_user.get_id()).order_by(Run.date_posted.desc())
+    runs = Run.query.filter_by(owner_id=current_user.get_id()).order_by(Run.date_posted.asc())
     return render_template('dashboard.html', runs = runs)
