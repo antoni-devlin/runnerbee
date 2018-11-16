@@ -52,13 +52,13 @@
 
 <script>
   // Initialize a Line chart in the container with the ID chart1
-  new Chartist.Line('#chart-distance-date', {
+  new Chartist.Bar('#chart-distance-date', {
     labels: [{% for run in runs %}"{{run.date_posted.strftime('%d/%m/%Y, %H:%M')}}",{% endfor %}],
     series: [[{% for run in runs %}{{run.distance}},{% endfor %}]]
   });
 
   // Initialize a Line chart in the container with the ID chart2
-  new Chartist.Bar('#chart-pace-date', {
+  new Chartist.Line('#chart-pace-date', {
     labels: [{% for run in runs %}"{{run.date_posted.strftime('%d/%m/%Y, %H:%M')}}",{% endfor %}],
     series: [[{% for run in runs %}{{run.run_time}}/{{run.distance}},{% endfor %}]]
   });
