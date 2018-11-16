@@ -2,8 +2,7 @@ import sendgrid
 import os
 
 def sendemail(to, subject, sender, content):
-        sg = sendgrid.SendGridAPIClient(apikey=os.environ.get('SENDGRID_API_KEY'))
-
+    sg = sendgrid.SendGridAPIClient(apikey=os.environ.get('SENDGRID_API_KEY'))
     data = {
       "personalizations": [
         {
