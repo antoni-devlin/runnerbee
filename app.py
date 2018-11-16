@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 from flask import Flask, url_for, render_template, request, flash, redirect, jsonify, send_from_directory
 from sqlalchemy.dialects.postgresql import *
+import dateutil.parser
 from flask_sqlalchemy import *
 from flask_migrate import Migrate
 from flask_login import LoginManager, UserMixin, current_user, login_user, logout_user, login_required
@@ -31,6 +32,8 @@ app = Flask(__name__)
 if 'DYNO' in os.environ:
     app.logger.addHandler(logging.StreamHandler(sys.stdout))
     app.logger.setLevel(logging.ERROR)
+
+release_date = dateutil.parser.parse(os.environ["HEROKU_RELEASE_CREATED_AT"])
 
 app.config["SQLALCHEMY_DATABASE_URI"] = database_file
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
@@ -91,6 +94,14 @@ class LoginForm(FlaskForm):
     username = StringField('Username', validators=[DataRequired()])
     password = PasswordField('Password', validators=[DataRequired()])
     submit = SubmitField('Sign In')
+
+#Global Jinja2 Variables
+@app.context_processor
+def context_processor():
+    return dict(
+    test='test success!',
+    release_date = release_date.strftime("%d %b, %Y"),
+    release_time = release_date.strftime("%H:%M"))
 
 #Load stuff for Flask Shell
 @app.shell_context_processor

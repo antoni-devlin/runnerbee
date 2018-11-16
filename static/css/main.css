@@ -122,3 +122,8 @@ input[type=submit] {
 input[type=submit]:hover {
     background-color: rgb(255, 215, 0);
 }
+
+.build-date {
+    font-size: 12px;
+    float: right;
+}

@@ -31,7 +31,6 @@
                 {% else %}
                 <a href="{{ url_for('logout') }}">Logout</a>
             {% endif %}
-
         </nav>
         <main>
             {% with messages = get_flashed_messages() %}
@@ -47,6 +46,7 @@
         {% endblock content %}
 
         {% block footer %}
+        <p class=build-date>Build date: {{ release_date }} at {{ release_time }}</p>
         {% endblock footer %}
         </main>
     </body>
