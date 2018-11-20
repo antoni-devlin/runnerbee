@@ -35,7 +35,7 @@ if 'DYNO' in os.environ:
 
 if "HEROKU_RELEASE_CREATED_AT" in os.environ:
     release_date_raw = dateutil.parser.parse(os.environ["HEROKU_RELEASE_CREATED_AT"])
-    release_date = release_date_raw.strftime("%d %b, %Y"),
+    release_date = release_date_raw.strftime("%d %b, %Y")
     release_time = release_date_raw.strftime("%H:%M")
 else:
     release_date = None
