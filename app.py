@@ -5,7 +5,7 @@ import dateutil.parser
 from flask_sqlalchemy import *
 from flask_migrate import Migrate
 from flask_login import LoginManager, UserMixin, current_user, login_user, logout_user, login_required
-from datetime import datetime
+from datetime import datetime, timedelta
 from flask_wtf import FlaskForm
 from wtforms import StringField, BooleanField, SubmitField, PasswordField
 from wtforms.fields.html5 import DateField, TimeField
@@ -33,7 +33,13 @@ if 'DYNO' in os.environ:
     app.logger.addHandler(logging.StreamHandler(sys.stdout))
     app.logger.setLevel(logging.ERROR)
 
-release_date = dateutil.parser.parse(os.environ["HEROKU_RELEASE_CREATED_AT"])
+if "HEROKU_RELEASE_CREATED_AT" in os.environ:
+    release_date_raw = dateutil.parser.parse(os.environ["HEROKU_RELEASE_CREATED_AT"])
+    release_date = release_date_raw.strftime("%d %b, %Y")
+    release_time = release_date_raw.strftime("%H:%M")
+else:
+    release_date = None
+    release_time = None
 
 app.config["SQLALCHEMY_DATABASE_URI"] = database_file
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
@@ -95,13 +101,13 @@ class LoginForm(FlaskForm):
     password = PasswordField('Password', validators=[DataRequired()])
     submit = SubmitField('Sign In')
 
+
 #Global Jinja2 Variables
 @app.context_processor
 def context_processor():
     return dict(
     test='test success!',
-    release_date = release_date.strftime("%d %b, %Y"),
-    release_time = release_date.strftime("%H:%M"))
+    release_date = release_date, release_time = release_time)
 
 #Load stuff for Flask Shell
 @app.shell_context_processor
@@ -121,11 +127,11 @@ def login():
         return redirect(url_for('index'))
     form = LoginForm()
     if form.validate_on_submit():
-        user = User.query.filter_by(username=form.username.data).first()
+        user = User.query.filter_by(username=form.username.data.lower()).first()
         if user is None or not user.check_password(form.password.data):
             flash('Invalid username or password')
             return redirect(url_for('login'))
-        login_user(user)
+        login_user(user, remember=True, duration=timedelta(days=2))
         next_page = request.args.get('next')
         if not next_page or url_parse(next_page).netloc != '':
             next_page = url_for('index')
